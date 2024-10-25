@@ -4,8 +4,8 @@ import { MenuIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { useState } from 'react';
-import { sidebarItems } from './sidebar';
 import Link from 'next/link';
+import { sidebarItems } from './sidebar';
 
 export default function NavbarSheet() {
   const [open, setOpen] = useState(false);

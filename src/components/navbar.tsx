@@ -5,7 +5,7 @@ import NavbarSheet from './navbar-sheet';
 
 export default function Navbar() {
   return (
-    <div className='mx-auto px-4 bg-green-900 sticky top-0 z-50'>
+    <div className='w-full mx-auto px-4 bg-green-900 z-50'>
       <div className='h-14 flex items-center justify-between'>
         <p className='text-white text-2xl font-bold'>a Board</p>
         <div className='flex items-center justify-between gap-2'>

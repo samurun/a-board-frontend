@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { HomeIcon, SquarePenIcon } from 'lucide-react';
+import { SidebarItemType } from '@/types';
 
-export const sidebarItems = [
+export const sidebarItems: SidebarItemType[] = [
   {
     icon: HomeIcon,
     label: 'Home',
@@ -9,26 +10,30 @@ export const sidebarItems = [
   },
   {
     icon: SquarePenIcon,
-    label: 'Out Blog',
+    label: 'Our Blog',
     href: '/our-blog',
   },
 ];
 
+// Create a separate SidebarItem component
+const SidebarItem = ({ item }: { item: SidebarItemType }) => (
+  <Link
+    href={item.href}
+    className='flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition-colors'
+  >
+    <item.icon className='w-5 h-5' />
+    <span>{item.label}</span>
+  </Link>
+);
+
 export default function Sidebar() {
   return (
-    <aside className='max-w-56 lg:max-w-80 w-full hidden md:block mt-10 sticky top-8'>
-      <div className='flex flex-col gap-4 p-4'>
+    <aside className='w-56 lg:w-80 hidden md:block mt-10 h-[calc(100vh-56px)] overflow-y-auto'>
+      <nav className='flex flex-col gap-2 p-4'>
         {sidebarItems.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className='flex items-center gap-2'
-          >
-            <item.icon className='size-4' />
-            <span>{item.label}</span>
-          </Link>
+          <SidebarItem key={item.label} item={item} />
         ))}
-      </div>
+      </nav>
     </aside>
   );
 }
