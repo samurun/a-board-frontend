@@ -1,7 +1,6 @@
-import { MessageCircleIcon, EditIcon, TrashIcon } from 'lucide-react';
+import { MessageCircleIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
 import UpdatePostButton from './update-post-button';
 import DeletePostButton from './delete-post-button';
 

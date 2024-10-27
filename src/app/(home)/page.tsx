@@ -1,6 +1,5 @@
 import BoardList from '@/components/board-list';
 import SearchFilterSection from '@/components/search-filter-section';
-import Sidebar from '@/components/sidebar';
 
 export default function Home() {
   return (
