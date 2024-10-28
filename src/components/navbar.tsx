@@ -1,21 +1,21 @@
+'use client';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
 import { cn } from '@/lib/utils';
 import NavbarSheet from './navbar-sheet';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import AccountButton from './account-button';
 import { UserType } from '@/types';
+import { useSession } from 'next-auth/react';
 
-export default async function Navbar() {
-  const session = await getServerSession(authOptions);
+export default function Navbar() {
+  const session = useSession();
 
   return (
     <nav className='w-full bg-green-900 z-50'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='h-14 flex items-center justify-between'>
           <Logo />
-          <NavItems session={session} />
+          {session && <NavItems session={session.data} />}
         </div>
       </div>
     </nav>
