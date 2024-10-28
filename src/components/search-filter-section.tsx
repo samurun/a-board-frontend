@@ -11,7 +11,7 @@ import {
 } from './ui/select';
 import { Button } from './ui/button';
 import CreatePostButton from './create-post-button';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export const communityOptions = [
   { label: 'History', value: 'history' },
@@ -27,6 +27,7 @@ export default function SearchFilterSection() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const SearchInput = ({ className = '', ...props }) => (
     <div className={`relative w-full ${className}`}>
@@ -47,7 +48,7 @@ export default function SearchFilterSection() {
               params.delete('search');
             }
 
-            router.push(`/?${params.toString()}`);
+            router.push(`${pathname}/?${params.toString()}`);
           }
         }}
         {...props}
@@ -86,7 +87,7 @@ export default function SearchFilterSection() {
                 ? params.delete('community')
                 : params.set('community', value);
 
-              router.push(`/?${params.toString()}`);
+              router.push(`${pathname}/?${params.toString()}`);
             }}
           >
             <SelectTrigger className='md:max-w-40 bg-white shadow-none'>
