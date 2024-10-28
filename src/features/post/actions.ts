@@ -61,14 +61,20 @@ export async function getMyPosts({
   }
 }
 
-export async function getPostById(id: string) {
+export async function getPostById(id: string): Promise<PostType | null> {
+  const url = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/posts/${id}`;
+
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/posts/${id}`;
     const res = await fetch(url);
+
+    if (!res.ok) {
+      return null;
+    }
+
     const post = await res.json();
     return post as PostType;
   } catch (error) {
-    console.log(error);
+    console.error('Error fetching post:', error);
     return null;
   }
 }
