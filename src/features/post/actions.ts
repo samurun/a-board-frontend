@@ -5,8 +5,16 @@ import { cookies } from 'next/headers';
 
 type FormState = { error?: string | string[] } | undefined;
 
-export async function getPosts(): Promise<PostType[] | null> {
-  const url = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/posts`;
+export async function getPosts({
+  title,
+  community,
+}: {
+  title?: string;
+  community?: string;
+}): Promise<PostType[] | null> {
+  const url = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/posts?title=${
+    title || ''
+  }&community=${community || ''}`;
 
   try {
     const res = await fetch(url);

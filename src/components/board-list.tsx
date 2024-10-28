@@ -2,9 +2,13 @@
 
 import { useGetPosts } from '@/features/post/api/use-get-posts';
 import { BoardListItem } from './board-list-item';
+import { useSearchParams } from 'next/navigation';
 
 export default function BoardList() {
-  const { data: posts, isLoading } = useGetPosts();
+  const searchParams = useSearchParams();
+  const title = searchParams.get('search') || '';
+  const community = searchParams.get('community') || '';
+  const { data: posts, isLoading } = useGetPosts({ title, community });
 
   if (isLoading) {
     return (
@@ -14,7 +18,7 @@ export default function BoardList() {
     );
   }
 
-  if (!posts)
+  if (posts?.length === 0)
     return (
       <div className='bg-white rounded-lg shadow p-8 text-center'>
         <p className='text-muted-foreground text-lg'>No posts found</p>

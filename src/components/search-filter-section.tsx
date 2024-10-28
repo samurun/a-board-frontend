@@ -11,6 +11,7 @@ import {
 } from './ui/select';
 import { Button } from './ui/button';
 import CreatePostButton from './create-post-button';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export const communityOptions = [
   { label: 'History', value: 'history' },
@@ -24,6 +25,8 @@ export const communityOptions = [
 
 export default function SearchFilterSection() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const SearchInput = ({ className = '', ...props }) => (
     <div className={`relative w-full ${className}`}>
@@ -32,7 +35,26 @@ export default function SearchFilterSection() {
         placeholder='Search...'
         className='pl-7 bg-white shadow-none w-full'
         {...props}
+        defaultValue={searchParams.get('search') || ''}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            const params = new URLSearchParams(searchParams);
+            const value = e.currentTarget.value;
+
+            if (value) {
+              params.set('search', value);
+            } else {
+              params.delete('search');
+            }
+
+            router.push(`/?${params.toString()}`);
+          }
+        }}
+        {...props}
       />
+      <span className='absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none border rounded px-1 bg-muted'>
+        Press ⏎
+      </span>
     </div>
   );
 
@@ -55,11 +77,23 @@ export default function SearchFilterSection() {
       </div>
       {!isSearchFocused && (
         <>
-          <Select defaultValue={communityOptions[0].value}>
+          <Select
+            defaultValue={searchParams.get('community') || 'all'}
+            onValueChange={(value) => {
+              const params = new URLSearchParams(searchParams);
+
+              value === 'all'
+                ? params.delete('community')
+                : params.set('community', value);
+
+              router.push(`/?${params.toString()}`);
+            }}
+          >
             <SelectTrigger className='md:max-w-40 bg-white shadow-none'>
-              <SelectValue placeholder='Community' />
+              <SelectValue placeholder='All' />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value='all'>All</SelectItem>
               {communityOptions.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
