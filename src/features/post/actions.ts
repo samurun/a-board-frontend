@@ -30,6 +30,37 @@ export async function getPosts({
   }
 }
 
+export async function getMyPosts({
+  title,
+  community,
+}: {
+  title?: string;
+  community?: string;
+}): Promise<PostType[] | null> {
+  const url = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/posts/my?title=${
+    title || ''
+  }&community=${community || ''}`;
+
+  const token = cookies().get('access-token')?.value;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const posts = await res.json();
+    return posts as PostType[];
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function getPostById(id: string) {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/posts/${id}`;
