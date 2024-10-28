@@ -47,7 +47,9 @@ export const CommunityEnum = z.enum([
 ]);
 
 export const createPostSchema = z.object({
-  community: CommunityEnum,
+  community: z.string().min(1, {
+    message: 'Community is required. Please select one.',
+  }),
   title: z.string().min(1, {
     message: 'Title is required. Please add one.',
   }),
