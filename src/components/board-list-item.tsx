@@ -2,12 +2,17 @@ import { PostType } from '@/features/post/type';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
+import PostAction from './post-action';
+import { useSession } from 'next-auth/react';
 
 interface BoardListItemProps {
   item: PostType;
 }
 
 export function BoardListItem({ item }: BoardListItemProps) {
+  const session = useSession();
+  const isCurrentUserAuthor =
+    session.data?.user?.username === item.author.username;
   return (
     <div className='block p-4 space-y-2p-4 bg-white space-y-2 relative'>
       <div className='flex items-center justify-between'>
@@ -21,6 +26,7 @@ export function BoardListItem({ item }: BoardListItemProps) {
             {item.author.name}
           </p>
         </div>
+        {isCurrentUserAuthor && <PostAction postId={item.id} />}
       </div>
       <Link href={`/posts/${item.id}`} className='block space-y-2'>
         <Badge variant='secondary'>{item.community}</Badge>
