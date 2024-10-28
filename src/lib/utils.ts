@@ -6,8 +6,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getRelativeTime(dateString: string): string {
+  // Parse date in local time zone
   const date = new Date(dateString);
   const now = new Date();
+
+  // Ensure valid date
+  if (isNaN(date.getTime())) {
+    return 'Invalid date';
+  }
+
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
