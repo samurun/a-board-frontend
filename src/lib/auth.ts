@@ -1,5 +1,6 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { cookies } from 'next/headers';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -33,6 +34,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           const { access_token } = await res.json();
+          cookies().set('access-token', access_token);
           const profileRes = await getProfile(access_token);
           const profile = await profileRes.json();
 
@@ -52,6 +54,10 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       session.user = token.user;
+
+      // Set the session expiration to 1 hour from now
+      session.expires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
       return session; // Session interface we declared in next-auth.d.ts
     },
   },
