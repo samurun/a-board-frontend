@@ -11,12 +11,10 @@ interface CommentProps {
 export default function Comment({ author, content, createdAt }: CommentProps) {
   return (
     <div className='flex space-x-4'>
-      <Avatar className='w-10 h-10'>
-        <AvatarImage
-          src={`https://api.dicebear.com/6.x/initials/svg?seed=${author}`}
-          alt={author}
-        />
-        <AvatarFallback>{author.slice(0, 2).toUpperCase()}</AvatarFallback>
+      <Avatar className='size-9'>
+        <AvatarFallback className='bg-primary/10 text-primary'>
+          {author.slice(0, 1).toUpperCase()}
+        </AvatarFallback>
       </Avatar>
       <div className='flex-1'>
         <div className='flex items-center space-x-2'>

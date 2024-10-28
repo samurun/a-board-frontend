@@ -1,17 +1,28 @@
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ArrowLeftIcon, MessageCircleIcon } from 'lucide-react';
+import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
-import AddCommentButton from '@/components/add-comment-button';
 import AuthorInfo from '@/components/author-info';
 import PostContent from '@/components/post-content';
+import { getPostById } from '@/features/post/actions';
+import { notFound } from 'next/navigation';
 import CommentSection from '@/components/comment-section';
 
-export default function PostPage() {
+export default async function PostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const post = await getPostById(params.slug);
+
+  if (!post) {
+    notFound();
+  }
+
   return (
     <div className='w-full mx-auto pt-10 pb-14 h-fit bg-white min-h-full'>
-      <main className='p-4 max-w-4xl mx-auto pt-10 space-y-6  min-h-full'>
+      <main className='p-4 max-w-4xl mx-auto pt-10 space-y-4 min-h-full'>
         <Link
           href='/'
           className={cn(
@@ -21,9 +32,9 @@ export default function PostPage() {
         >
           <ArrowLeftIcon />
         </Link>
-        <AuthorInfo />
-        <Badge variant='secondary'>History</Badge>
-        <PostContent />
+        <AuthorInfo author={post?.author} updatedAt={post?.updated_at || ''} />
+        <Badge variant='secondary'>{post?.community}</Badge>
+        <PostContent title={post?.title} content={post?.content} />
         <CommentSection />
       </main>
     </div>
