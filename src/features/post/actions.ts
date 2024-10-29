@@ -26,6 +26,7 @@ export async function getPosts({
     const posts = await res.json();
     return posts as PostType[];
   } catch (error) {
+    console.error('Error fetching posts:', error);
     return null;
   }
 }
@@ -57,6 +58,7 @@ export async function getMyPosts({
     const posts = await res.json();
     return posts as PostType[];
   } catch (error) {
+    console.error('Error fetching my posts:', error);
     return null;
   }
 }
