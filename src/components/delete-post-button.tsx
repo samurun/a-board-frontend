@@ -14,7 +14,7 @@ import {
 import { deletePost } from '@/features/post/actions';
 import FormSubmitButton from './form-summit-button';
 import { useFormState } from 'react-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -27,22 +27,28 @@ export default function DeletePostButton({ postId }: DeletePostButtonProps) {
   const queryClient = useQueryClient();
   const [formState, formAction] = useFormState(deletePost, undefined);
 
-  const handleDelete = (formData: FormData) => {
-    formAction(formData);
-    if (!formState?.error) {
+  // Handle form state changes with useEffect
+  useEffect(() => {
+    if (!formState) return;
+
+    if (formState.error) {
+      toast.error(formState.error);
+      setIsOpen(false);
+    } else if (formState.success) {
+      toast.success('Post deleted successfully');
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ['posts'] });
-      toast.success('Post deleted successfully');
     }
-  };
+  }, [formState, queryClient]);
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant='ghost' className='size-7 p-0'>
-          <TrashIcon className='size-3' />
+        <Button variant='ghost' size='icon' aria-label='Delete post'>
+          <TrashIcon className='h-4 w-4' />
         </Button>
       </AlertDialogTrigger>
+
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Post Deletion</AlertDialogTitle>
@@ -56,7 +62,7 @@ export default function DeletePostButton({ postId }: DeletePostButtonProps) {
         )}
         <AlertDialogFooter className='gap-2'>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <form action={handleDelete}>
+          <form action={formAction}>
             <input type='hidden' name='postId' value={postId} />
             <FormSubmitButton type='submit' variant='destructive'>
               Yes, Delete
