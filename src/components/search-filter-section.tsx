@@ -35,7 +35,6 @@ export default function SearchFilterSection() {
       <Input
         placeholder='Search...'
         className='pl-7 bg-white shadow-none w-full'
-        {...props}
         defaultValue={searchParams.get('search') || ''}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
@@ -83,9 +82,11 @@ export default function SearchFilterSection() {
             onValueChange={(value) => {
               const params = new URLSearchParams(searchParams);
 
-              value === 'all'
-                ? params.delete('community')
-                : params.set('community', value);
+              if (value === 'all') {
+                params.delete('community');
+              } else {
+                params.set('community', value);
+              }
 
               router.push(`${pathname}/?${params.toString()}`);
             }}
