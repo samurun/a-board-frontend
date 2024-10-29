@@ -1,4 +1,4 @@
-import { getPostById, getPosts } from '@/features/post/actions';
+import { getPostById } from '@/features/post/actions';
 import { useQuery } from '@tanstack/react-query';
 
 export function useGetPost(postId: string) {
