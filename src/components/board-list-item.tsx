@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PostAction from './post-action';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
+import CommentCounter from './comment-counter';
 
 interface BoardListItemProps {
   item: PostType;
@@ -69,6 +70,7 @@ export function BoardListItem({ item }: BoardListItemProps) {
           </h2>
           <p className='line-clamp-2'>{item.content}</p>
         </div>
+        <CommentCounter count={item.comments.length} />
       </Link>
     </div>
   );
