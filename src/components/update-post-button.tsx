@@ -26,17 +26,13 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { useGetPost } from '@/features/post/api/use-get-post';
 import { useEffect, useState } from 'react';
-import { useFormState } from 'react-dom';
 import FormSubmitButton from './form-summit-button';
-import { useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { useUpdatePost } from '@/features/post/api/use-update-post';
 
 export default function UpdatePostButton({ postId }: { postId: string }) {
   const { data: post } = useGetPost(postId);
   const [isOpen, setIsOpen] = useState(false);
   const { mutate: updatePost } = useUpdatePost({ postId });
-  const queryClient = useQueryClient();
 
   const form = useForm<CreatePostSchemaType>({
     resolver: zodResolver(createPostSchema),
