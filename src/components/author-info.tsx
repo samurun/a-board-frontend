@@ -1,5 +1,5 @@
 import { getRelativeTime } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Avatar, AvatarFallback } from './ui/avatar';
 import { AuthorType } from '@/features/post/type';
 
 export default function AuthorInfo({
