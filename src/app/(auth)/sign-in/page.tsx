@@ -10,7 +10,7 @@ export default function SignIn() {
           <h1 className='text-2xl font-bold'>Sign in</h1>
           <SignInCard />
           <div className='flex items-center gap-2 text-sm'>
-            <p>Don't have an account?</p>
+            <p>Don&apos;t have an account?</p>
             <Link href='/sign-up'>Sign up</Link>
           </div>
         </div>
