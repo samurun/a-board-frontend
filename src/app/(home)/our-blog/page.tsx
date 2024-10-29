@@ -1,6 +1,7 @@
 import OurBoardList from '@/components/our-board-list';
 import SearchFilterSection from '@/components/search-filter-section';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Our Blog',
@@ -17,8 +18,10 @@ export const metadata: Metadata = {
 export default function OurBlogPage() {
   return (
     <main className='p-4 max-w-screen-md w-full pt-10 pb-14 h-fit space-y-4'>
-      <SearchFilterSection />
-      <OurBoardList />
+      <Suspense fallback={<div>Loading...</div>}>
+        <SearchFilterSection />
+        <OurBoardList />
+      </Suspense>
     </main>
   );
 }
