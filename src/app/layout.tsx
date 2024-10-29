@@ -16,8 +16,10 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'a Board',
-  description: 'a Board is a simple and easy-to-use board for your team.',
+  title: {
+    default: 'a Board',
+    template: `%s |  a Board`,
+  },
 };
 
 export default function RootLayout({
