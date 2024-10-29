@@ -1,47 +1,32 @@
-import { MessageCircleIcon } from 'lucide-react';
+'use client';
 import AddCommentButton from './add-comment-button';
 import Comment from './comment';
-
-// Mock comments data
-const comments = [
-  {
-    id: 1,
-    author: 'Alice',
-    content:
-      'Lorem ipsum dolor sit amet consectetur. Purus cursus vel est a pretium quam imperdiet. Tristique auctor sed semper nibh odio iaculis sed aliquet. Amet mollis eget morbi feugiat mi risus eu. Tortor sed sagittis convallis auctor.',
-    createdAt: '2024-03-15T10:00:00Z',
-  },
-  {
-    id: 2,
-    author: 'Bob',
-    content:
-      'Lorem ipsum dolor sit amet consectetur. Purus cursus vel est a pretium quam imperdiet. Tristique auctor sed semper nibh odio iaculis sed aliquet. Amet mollis eget morbi feugiat mi risus eu. Tortor sed sagittis convallis auctor.',
-    createdAt: '2024-03-15T11:30:00Z',
-  },
-  {
-    id: 3,
-    author: 'Charlie',
-    content:
-      'Lorem ipsum dolor sit amet consectetur. Purus cursus vel est a pretium quam imperdiet. Tristique auctor sed semper nibh odio iaculis sed aliquet. Amet mollis eget morbi feugiat mi risus eu. Tortor sed sagittis convallis auctor.',
-    createdAt: '2024-03-15T12:45:00Z',
-  },
-];
+import { useGetComments } from '@/features/comment/api/use-get-comments';
+import { useParams } from 'next/navigation';
+import CommentCounter from './comment-counter';
 
 export default function CommentSection() {
+  const postId = useParams().slug;
+
+  if (typeof postId !== 'string') return null;
+
+  const { data: comments } = useGetComments(postId);
+
   return (
     <>
+      <CommentCounter count={comments?.length || 0} />
       <section className='flex items-center gap-2'>
-        <MessageCircleIcon className='size-4' />
-        <p className='text-muted-foreground text-sm'>
-          {comments.length} Comments
-        </p>
-      </section>
-      <section className='flex items-center gap-2'>
-        <AddCommentButton />
+        <AddCommentButton postId={postId} />
       </section>
       <section className='space-y-4'>
-        {comments.map((comment) => (
-          <Comment key={comment.id} {...comment} />
+        {comments?.map((comment) => (
+          <Comment
+            key={comment.id}
+            id={comment.id}
+            author={comment.author}
+            content={comment.content}
+            createdAt={comment.created_at}
+          />
         ))}
       </section>
     </>

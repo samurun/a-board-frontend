@@ -61,7 +61,7 @@ export const createPostSchema = z.object({
 export type CreatePostSchemaType = z.infer<typeof createPostSchema>;
 
 export const createCommentSchema = z.object({
-  comment: z.string().min(1, {
+  content: z.string().min(1, {
     message: 'Content is required. Please add some.',
   }),
 });

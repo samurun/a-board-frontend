@@ -8,19 +8,35 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from './ui/textarea';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useState } from 'react';
+import { useCreateComment } from '@/features/comment/api/use-create-comment';
+import { useQueryClient } from '@tanstack/react-query';
+import { signIn, useSession } from 'next-auth/react';
 
-export default function AddCommentButton() {
+export default function AddCommentButton({ postId }: { postId: string }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [open, setOpen] = useState(false);
+  const { status } = useSession();
+
+  const queryClient = useQueryClient();
+
+  const { mutate: createComment } = useCreateComment({ postId: postId });
 
   const form = useForm<CreateCommentSchemaType>({
     resolver: zodResolver(createCommentSchema),
-    defaultValues: { comment: '' },
+    defaultValues: { content: '' },
   });
 
   function onSubmit(values: CreateCommentSchemaType) {
-    console.log(values);
-    setOpen(false);
+    createComment(values, {
+      onSuccess: () => {
+        setOpen(false);
+        queryClient.invalidateQueries({ queryKey: ['comments', postId] });
+        form.reset();
+      },
+      onError: (error) => {
+        console.error('Error creating comment:', error);
+      },
+    });
   }
 
   const commentForm = (
@@ -28,11 +44,12 @@ export default function AddCommentButton() {
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4 w-full'>
         <FormField
           control={form.control}
-          name='comment'
+          name='content'
           render={({ field }) => (
             <FormItem>
               <FormControl>
                 <Textarea
+                  autoFocus
                   rows={4}
                   placeholder="What's on your mind..."
                   {...field}
@@ -53,6 +70,14 @@ export default function AddCommentButton() {
       </form>
     </Form>
   );
+
+  if (status !== 'authenticated') {
+    return (
+      <Button variant='outline' onClick={() => signIn()}>
+        Sign in to comment
+      </Button>
+    );
+  }
 
   if (!open) {
     return (
