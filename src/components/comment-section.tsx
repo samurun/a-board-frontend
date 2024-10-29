@@ -7,10 +7,9 @@ import CommentCounter from './comment-counter';
 
 export default function CommentSection() {
   const postId = useParams().slug;
+  const { data: comments } = useGetComments(postId as string);
 
   if (typeof postId !== 'string') return null;
-
-  const { data: comments } = useGetComments(postId);
 
   return (
     <>
